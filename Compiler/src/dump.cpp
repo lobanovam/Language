@@ -1,21 +1,9 @@
-#ifndef DUMP_H_INCLUDED
-#define DUMP_H_INCLUDED
+#include <stdio.h>
+#include <stdlib.h>
 
-#define dumpToken(str...)                                                 \
-    fprintf(DumpToken, str);                                               \
-    fflush(DumpToken)
+#include "../includes/dump.h"
 
-#ifndef DUMP_TOKEN
-    #define DUMP_TOKEN "token.dot"
-#endif
-
-const char png[5] = ".png";
-static int tokenImageNum = 1;
-
-FILE *openDump();
-char* IntToString(int num);
-
-FILE* openDump(const char* name) {
+FILE *openDump(const char* name) {
     FILE *Dump = fopen(name, "w");
     if (Dump == NULL)
         printf("ERROR, CAN'T OPEN DUMP FILE\n");
@@ -40,5 +28,3 @@ char* IntToString(int num) {
     }
     return str;
 }
-
-#endif // DUMP_H_INCLUDED

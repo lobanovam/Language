@@ -1,30 +1,28 @@
+#ifndef LANG_H_INCLUDED
+#define LANG_H_INCLUDED
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys\stat.h>
 #include <ctype.h>
 
-#include "log.h"
+#include "dictionary.h"
+
 #include "dump.h"
+#include "log.h"
+
+struct Tree {
+    struct node* root;
+};
 
 
-void readFile(struct Text* text);
-void trimSpaces(struct Text* text);
-
-int Tokenize(struct Token **tokens, struct Text* text);
-char* getFuncName(const char* str);
-char* getVarName(const char* str);
-double getVal(const char* str, int* digits);
-struct Token* CreateToken(int type, int LangOp, double dbl, char* name, size_t line);
-struct node* CreateNode(int type, int LangOp, double dbl, char* name);
-void tokenDump(struct Token **tokens, size_t tokenSize);
 char* getSpecName(int spec);
-
-
-const char* SOURCE = "userCode.txt";
+void TreeCtor(struct Tree* tree);
+void NodesDtor(struct node* node);
+void TreeDtor(struct Tree* tree);
 
 enum LENS {
-    MAX_FUNC_NAME = 30,
+    MAX_FUNC_NAME = 50,
     MAX_VAR_NAME = 30,
 };
 
@@ -35,6 +33,7 @@ struct Text {
 };
 
 struct node {
+    int               type;
     union LangUnion* value;
     struct node*    parent;
     struct node*      left;
@@ -42,15 +41,15 @@ struct node {
 };
 
 union LangUnion {
-    double         dbl;
-    int       langType;
+    double      dbl;
+    int    langType;
     char*      Name;
 };
 
 struct Token {
-    int           type;
-    struct node * node;
-    size_t        line;
+    int               type;
+    union LangUnion* value;
+    size_t            line;
 };
 
 enum Types {
@@ -66,6 +65,7 @@ enum LangTypes {
     SUB,
     DIV,
     MUL,
+    SQRT,
     POW,
     AND,
     OR,
@@ -78,6 +78,10 @@ enum LangTypes {
     IS_GT,
     IS_BT,
     IS_NE,
+
+    //userIO
+    IN,
+    OUT,
     
     // Special nodes 
     ST,
@@ -87,12 +91,24 @@ enum LangTypes {
     VAR,
     WHILE,
     FUNC,
+    INT_FUNC,
+    VOID_FUNC,
+    TYPE,
+    VOID,
     RET,
     CALL,
     PARAM,
+    OPEN_BR,
+    CLOSE_BR,
 
     //for Tokenizer
     SoFOO,       //start of func
     EoFOO,       //end of func
-
+    SoCOND,      //start of condition
+    EoCOND,       //end of condition
+    EOT,          //end of tokens
+    EoPAR,        //end of params
+    ENDIF         //endif   
 };
+
+#endif

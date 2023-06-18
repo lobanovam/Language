@@ -1,7 +1,0 @@
-trebleKey solist()
-{
-    note a#b?c# = D.S. al coda primo() tatto 
-}
-
-
-  
